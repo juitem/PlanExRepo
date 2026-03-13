@@ -1,0 +1,90 @@
+{
+  "name": "planex2",
+  "displayName": "PlanEx2 - Folder & File Merger",
+  "description": "Compare two directories and selectively merge files and folders.",
+  "version": "0.1.0",
+  "publisher": "planex2-dev",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "keywords": ["diff", "merge", "folder", "compare", "file manager"],
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/planex2-dev/planex2" },
+  "galleryBanner": { "color": "#1e1e2e", "theme": "dark" },
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "planex2.compareFolders", "title": "PlanEx2: Compare Folders", "icon": "$(folder-opened)" },
+      { "command": "planex2.refresh", "title": "PlanEx2: Refresh", "icon": "$(refresh)" },
+      { "command": "planex2.mergeFileToTarget", "title": "Merge → Target" },
+      { "command": "planex2.mergeFileToSource", "title": "Merge → Source" },
+      { "command": "planex2.mergeFolderToTarget", "title": "Merge Folder → Target" },
+      { "command": "planex2.openDiff", "title": "Open Diff" },
+      { "command": "planex2.nextDiffFile", "title": "PlanEx2: Next Modified File" },
+      { "command": "planex2.prevDiffFile", "title": "PlanEx2: Previous Modified File" },
+      { "command": "planex2.nextHunk", "title": "PlanEx2: Next Diff Hunk" },
+      { "command": "planex2.prevHunk", "title": "PlanEx2: Previous Diff Hunk" }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        { "id": "planex2-sidebar", "title": "PlanEx2", "icon": "$(diff)" }
+      ]
+    },
+    "views": {
+      "planex2-sidebar": [
+        { "id": "planex2Tree", "name": "Folder Diff" }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        { "command": "planex2.compareFolders", "when": "view == planex2Tree", "group": "navigation" },
+        { "command": "planex2.refresh", "when": "view == planex2Tree", "group": "navigation" }
+      ],
+      "view/item/context": [
+        { "command": "planex2.mergeFileToTarget", "when": "view == planex2Tree && viewItem =~ /^(modified|added|deleted|conflict)$/", "group": "1_merge@1" },
+        { "command": "planex2.mergeFileToSource", "when": "view == planex2Tree && viewItem =~ /^(modified|deleted)$/", "group": "1_merge@2" },
+        { "command": "planex2.openDiff", "when": "view == planex2Tree && viewItem =~ /^(modified|conflict)$/", "group": "2_diff@1" },
+        { "command": "planex2.mergeFolderToTarget", "when": "view == planex2Tree && viewItem == folder", "group": "1_merge@1" }
+      ],
+      "commandPalette": [
+        { "command": "planex2.mergeFileToTarget", "when": "false" },
+        { "command": "planex2.mergeFileToSource", "when": "false" },
+        { "command": "planex2.mergeFolderToTarget", "when": "false" },
+        { "command": "planex2.openDiff", "when": "false" }
+      ]
+    },
+    "keybindings": [
+      { "command": "planex2.nextDiffFile", "key": "alt+n", "when": "planex2Active || focusedView == planex2Tree" },
+      { "command": "planex2.prevDiffFile", "key": "alt+p", "when": "planex2Active || focusedView == planex2Tree" },
+      { "command": "planex2.nextHunk",     "key": "alt+.", "when": "planex2Active && isInDiffEditor" },
+      { "command": "planex2.prevHunk",     "key": "alt+,", "when": "planex2Active && isInDiffEditor" }
+    ],
+    "viewsWelcome": [
+      {
+        "view": "planex2Tree",
+        "contents": "No folders selected for comparison.\n\nClick the button below (or the folder icon in the title bar) to select two folders to compare.\n\n[$(folder-opened) Compare Folders](command:planex2.compareFolders)"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./tsconfig.json",
+    "watch": "tsc -watch -p ./tsconfig.json",
+    "test:harness": "mocha --require ts-node/register --project tsconfig.test.json 'test/harness/sanity.test.ts'",
+    "test:unit": "mocha --require ts-node/register --project tsconfig.test.json 'test/suite/**/*.test.ts'",
+    "test:all": "mocha --require ts-node/register --project tsconfig.test.json 'test/harness/sanity.test.ts' 'test/suite/**/*.test.ts'",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.0.0",
+    "mocha": "^10.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "ignore": "^5.3.0"
+  }
+}

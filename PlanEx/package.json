@@ -1,0 +1,130 @@
+{
+  "name": "planex",
+  "version": "1.0.0",
+  "displayName": "PlanEx",
+  "description": "Compare and merge two directories with a hierarchical diff tree, file-level and line-level merging, and navigation.",
+  "publisher": "planex-dev",
+  "engines": {
+    "vscode": "^1.107.0"
+  },
+  "activationEvents": [
+    "onCommand:planex.compareFolders"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "planex-sidebar",
+          "title": "PlanEx",
+          "icon": "resources/planex-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "planex-sidebar": [
+        {
+          "id": "planex-diff-tree",
+          "name": "Folder Diff"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "planex.compareFolders",
+        "title": "PlanEx: Compare Folders",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "planex.refresh",
+        "title": "PlanEx: Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "planex.action.mergeFile",
+        "title": "PlanEx: Merge File (Source → Target)",
+        "icon": "$(arrow-right)"
+      },
+      {
+        "command": "planex.action.mergeFolder",
+        "title": "PlanEx: Merge Folder (Source → Target)",
+        "icon": "$(folder-active)"
+      },
+      {
+        "command": "planex.action.deleteFile",
+        "title": "PlanEx: Delete from Target",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "planex.action.nextDiffFile",
+        "title": "PlanEx: Next Changed File",
+        "icon": "$(arrow-down)"
+      },
+      {
+        "command": "planex.action.prevDiffFile",
+        "title": "PlanEx: Previous Changed File",
+        "icon": "$(arrow-up)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "planex.compareFolders",
+          "when": "view == planex-diff-tree",
+          "group": "navigation@1"
+        },
+        {
+          "command": "planex.refresh",
+          "when": "view == planex-diff-tree",
+          "group": "navigation@2"
+        },
+        {
+          "command": "planex.action.prevDiffFile",
+          "when": "view == planex-diff-tree",
+          "group": "navigation@3"
+        },
+        {
+          "command": "planex.action.nextDiffFile",
+          "when": "view == planex-diff-tree",
+          "group": "navigation@4"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "planex.action.mergeFile",
+          "when": "view == planex-diff-tree && viewItem == file",
+          "group": "inline@1"
+        },
+        {
+          "command": "planex.action.mergeFolder",
+          "when": "view == planex-diff-tree && viewItem == folder",
+          "group": "inline@1"
+        },
+        {
+          "command": "planex.action.deleteFile",
+          "when": "view == planex-diff-tree && viewItem == file",
+          "group": "inline@2"
+        }
+      ]
+    }
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test:harness": "ts-node harness/sanity.test.ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@types/vscode": "^1.107.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

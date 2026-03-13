@@ -1,0 +1,12 @@
+.vscode/**
+.vscode-test/**
+test/**
+src/**
+tsconfig.json
+tsconfig.test.json
+docs/**
+node_modules/**
+out-test/**
+*.vsix
+.gitignore
+.planex2ignore
